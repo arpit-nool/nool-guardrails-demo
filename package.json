@@ -1,0 +1,13 @@
+{
+  "name": "nool-guardrails-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "demo:verify": "node scripts/verify.js",
+    "demo:record": "node scripts/record.js"
+  },
+  "engines": { "node": ">=22" }
+}

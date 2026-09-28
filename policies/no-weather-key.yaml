@@ -1,0 +1,10 @@
+inv_id: no-weather-key-in-code
+title: Keep the weather API key out of source code
+scope:
+  type: global
+kind: structural
+severity: critical
+mode: blocking
+reason_code: 406
+forbids:
+  - diff_contains: "DEMO_ONLY_WEATHER_KEY_123456"

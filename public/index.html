@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nool · Before this code ships</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header><a href="/" class="brand">nool<span> / guardrails</span></a></header>
+  <main>
+    <section class="intro">
+      <h1>A feature works. Should it ship?</h1>
+      <p class="lead">An agent adds weather and hardcodes a key. Can Nool catch it before it ships?</p>
+    </section>
+    <div class="play-controls"><button id="play-loop" class="secondary" type="button">Play loop ∞</button><button id="pause-loop" class="secondary" type="button" hidden>Pause</button><span id="loop-note">Loops the story; shows real Nool output when available.</span></div>
+    <ol id="steps" aria-label="Demo progress"><li class="active">01 · Request</li><li>02 · Mistake</li><li>03 · Rule</li><li>04 · Check</li><li>05 · Fix</li><li>06 · Result</li></ol>
+    <section class="story" aria-live="polite">
+      <div class="explanation">
+        <p class="eyebrow" id="chapter">01 / THE REQUEST</p>
+        <h2 id="title">“Add a weather lookup.”</h2>
+        <p id="explain">A normal request for a coding agent. Show the weather for a selected city.</p>
+        <div class="callout" id="callout">The rule we want to enforce: keep the API key outside source code.</div>
+        <div class="controls"><button id="next">See the agent’s code →</button><button id="reset" class="secondary">Start again</button></div>
+        <p class="note" id="note">Prepared agent example · fake key · sample weather · no live AI or weather API</p>
+      </div>
+      <div class="evidence">
+        <div class="window-bar"><span class="dots">● ● ●</span><span id="file-label">Feature request</span><span id="badge">READY</span></div>
+        <div id="prompt" class="prompt"><span class="small-label">PROMPT GIVEN TO THE AGENT</span><p>Add a weather lookup. Let users select Delhi, London, or Mumbai and see the temperature and conditions.</p><p class="muted">For this recording, the agent’s mistake and correction are prepared examples.</p></div>
+        <pre id="code" hidden></pre>
+        <div id="terminal" hidden><p class="command" id="command"></p><pre id="output"></pre></div>
+        <div class="weather" id="weather"><div><span class="small-label">WORKING APP PREVIEW</span><h3 id="city-name">Delhi</h3><span id="weather-result">29° · Sunny</span></div><label>City<select id="city"><option>Delhi</option><option>London</option><option>Mumbai</option></select></label></div>
+        <p class="fixture">Weather values are local sample data, not a live forecast.</p>
+        <details id="raw-details"><summary>Show full terminal output</summary><pre id="raw">No terminal output yet. Click through the story and run a Nool check to capture the CLI output here. The automatic loop only replays saved results; it does not run commands.</pre></details>
+      </div>
+    </section>
+    <footer>Local demo · the checked-in policy blocks this exact fake marker; it is not a general secret scanner · no real credential is used</footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
