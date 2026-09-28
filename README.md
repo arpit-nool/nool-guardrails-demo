@@ -1,31 +1,70 @@
-# Nool guardrails demo
+# Nool Guardrails Demo
 
-A 90-second, screen-recordable weather feature example. Viewers see a deliberately fake API key in the code, the matching blocking Nool rule, a live Nool CLI proposal check, the safer environment-variable version, and a second proposal check. Weather results use local sample data; the app makes no external API calls and uses no real credentials.
+A small, screen-recordable demo of a coding agent adding a weather lookup—and putting an API key in source code. The guided story shows the proposed change, a focused Nool policy, the real Nool CLI result, and a safer environment-variable version.
 
-## Run the demo
+> **Demo integrity:** the key is a fake marker, weather data is local sample data, and no LLM or live weather service is called. A result is called a policy block only when Nool actually reports the configured rule. If Nool stops earlier for another reason, the UI shows that reason instead.
 
-Requirements: Node.js 22+ and a Nool CLI configured with an unexpired Editor/Planner contract for this repository. The current CLI must return an actual policy denial for the first version and accept the corrected proposal. `npm run demo:verify` checks those conditions and exits with an error if Nool stops for another reason.
+## Run it
+
+Requirements:
+
+- Node.js 22 or newer
+- Nool CLI installed and available as `nool`
+- An unexpired Nool Editor/Planner contract for the temporary demo workspace
+
+No npm packages need to be installed; this project uses Node.js built-ins.
 
 ```sh
+npm test
 npm run demo:verify
 npm start
 ```
 
-Open `http://127.0.0.1:4175`. The guided screen pauses after each explanation and runs the Nool check at the relevant step. Expand “Show full terminal output” to see the complete CLI output. Results are saved locally to `artifacts/latest-run.json` for troubleshooting.
+Open [http://127.0.0.1:4175](http://127.0.0.1:4175). Use **See the agent’s code** to move through the six steps. The Nool checks run at the two check steps. Expand **Show full terminal output** to inspect the complete CLI output.
 
-**Play loop ∞** replays the six screens indefinitely. When real check results are saved, the loop displays them; otherwise it marks the check “Not run” and never invents a result. Playback does not rerun Nool. You can also open `http://127.0.0.1:4175/?play=loop` to start replay automatically.
+`npm run demo:verify` checks the unsafe and corrected versions before recording. It exits successfully only when functional tests pass, Nool blocks the fake key in the first proposal, and Nool accepts the corrected proposal. Check results and raw output are saved locally in `artifacts/latest-run.json` (ignored by Git).
 
-The checks run in a temporary Git/Nool workspace. The unsafe example is a prepared teaching scenario, not an actual model-generated change. The demo does not call an LLM or use a real weather service.
+## Play or record
 
-## Recording
+For a looping screen recording, run the checks first, then start the app with:
 
-1. Stop any already running copy of the demo. Run `npm run demo:verify` first. Do not record the guardrail as working unless it reports that Nool blocked the fake key and accepted the corrected proposal.
-2. Run `npm run demo:record`. Open `http://127.0.0.1:4175` and begin a screen recording (on macOS, press `Cmd+Shift+5` and choose Record Selected Portion).
-3. Click through the six steps. Pause on the red highlighted key, the actual policy denial, then the environment-variable fix and accepted proposal.
-4. Expand “Inspect the actual command output” for the terminal evidence. Stop the recording after the final result.
+```sh
+npm run demo:record
+```
 
-## Current machine limitation
+Open [http://127.0.0.1:4175/?play=loop](http://127.0.0.1:4175/?play=loop). **Play loop ∞** replays the six-step story without rerunning commands; **Pause** stops it. Saved Nool output appears at the check steps. If no result was saved, the demo labels that step **Not run** rather than implying a pass or block.
 
-On the machine used to prepare this demo, Nool 7.8.1 Community returns “No unexpired Editor/Planner contract” before evaluating either code version. That is an account access denial, not the secret policy. Use an activated Nool build/account to record the intended blocked/accepted story. Until then, the screen explicitly identifies the early denial and must not be presented as proof that the secret rule fired.
+On macOS, use **Cmd+Shift+5 → Record Selected Portion** to capture the browser. Keep the full demo card in frame; expand the terminal drawer when you want to show the actual output. Verify the results before presenting the guardrail as working.
 
-The teaching policy in `policies/no-weather-key.yaml` blocks the exact fake marker used in this demo. It is intentionally narrow; it does not claim to detect every possible secret.
+## What the story demonstrates
+
+1. A request to add a weather lookup.
+2. A deliberately unsafe implementation with a clearly fake key.
+3. A Nool policy configured to reject that exact fake marker.
+4. Nool evaluating the proposed change.
+5. A correction that reads the key from the server environment.
+6. Nool evaluating the corrected proposal.
+
+The proposal checks run in a disposable Git/Nool workspace under the system temporary directory. They do not modify this repository. The weather preview uses local fixture data and never makes a network request.
+
+## Current Nool access requirement
+
+On the machine used to prepare this demo, Nool 7.8.1 Community stops both proposals before policy evaluation with:
+
+```text
+No unexpired Editor/Planner contract in this repository
+```
+
+That is an access denial—not evidence that the key policy blocked the change. Use an activated Nool build/account with the required contract, then rerun `npm run demo:verify`. Until verification reports both the expected block and acceptance, present the actual access-denial output and do not claim that the guardrail fired.
+
+The policy in `policies/no-weather-key.yaml` is intentionally narrow: it matches the demo marker and is not a general-purpose secret scanner.
+
+## Project files
+
+- `public/` — screen-recordable guided demo
+- `policies/no-weather-key.yaml` — focused teaching policy
+- `scenarios/unsafe.txt` — prepared unsafe proposal
+- `src/` and `test/` — corrected weather fixture and functional test
+- `scripts/workflow.js` — isolated Git/Nool proposal workflow
+- `scripts/verify.js` — verifies both expected Nool outcomes
+- `server.js` — local-only demo server and API
